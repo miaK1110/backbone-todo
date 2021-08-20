@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jquery-todo</title>
+  <link rel="stylesheet" href="dist/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+</head>
+
+<body>
+
+  <!-- Header-area -->
+  <header class="l-header">
+    <div class="p-header">
+      <h1 class="p-header__title">jQuery TODO</h1>
+      <span class="p-header__emoji">&#128020;</span>
+    </div>
+  </header>
+
+  <!-- Add-todo-area -->
+  <main class="l-main">
+    <form class="p-addTodo">
+      <div class="p-addTodo__inputArea">
+        <input type="text" class="p-addTodo__inputText js-get-val" value="" placeholder="...">
+        <span class="c-error js-toggle-error">You need to put something</span>
+      </div>
+      <button class="c-btn p-addTodo__btn js-add-todo">Add Todo</button>
+    </form>
+
+    <!-- Search-area -->
+    <div class="p-searchBox">
+      <i class="fa fa-search p-searchBox__icon" aria-hidden="true"></i>
+      <input type="text" class="p-searchBox__inputText js-search" value="" placeholder="Search todos">
+    </div>
+
+    <!-- Todo-list -->
+    <ul class="p-todoList js-todo_list">
+      <li class="p-listItem js-todo_list-item" data-text="click tasks to swicth edit mode">
+        <i class="c-icon p-listItem__iconTick far fa-check-circle js-click-done" aria-hidden="true"></i>
+        <span class="p-listItem__text js-todo_list-text">Click todo to edit</span>
+        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click tasks to swicth edit mode">
+        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
+      </li>
+      <li class="p-listItem js-todo_list-item" data-text="Tick to done the task">
+        <i class="c-icon p-listItem__iconTick far fa-check-circle js-click-done" aria-hidden="true"></i>
+        <span class="p-listItem__text js-todo_list-text">Tick the todo to set to done</span>
+        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="Tick to done the task">
+        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
+      </li>
+      <li class="p-listItem p-listItem--done js-todo_list-item" data-text="click bin to delete the task">
+        <i class="c-icon p-listItem__iconTick fas fa-check-circle  js-click-undo" aria-hidden="true"></i>
+        <span class="p-listItem__text js-todo_list-text">Click bin to delete todo</span>
+        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click bin to delete the task">
+        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
+      </li>
+    </ul>
+  </main>
+
+  <script src="/dist/all.js"></script>
+</body>
+
+</html>

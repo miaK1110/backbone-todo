@@ -1,0 +1,65 @@
+@use './object/utility/import' as i;
+
+.p-todoList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-size: 0;
+  .p-listItem {
+    overflow: hidden;
+    padding: 15px 15px;
+    background: i.$bgColor-white;
+    border-bottom: 1px solid i.$borderColor;
+    transition: 0.5s transform;
+
+    &:hover {
+      transform: scale(1.02);
+      transition: 0.5s transform;
+    }
+
+    &__iconTick {
+      color: i.$icon-check;
+    }
+
+    &__iconBin {
+      float: right;
+      color: i.$icon-bin;
+    }
+
+    &__text {
+      width: 80%;
+      height: 100%;
+      border: none;
+      padding: 5px 10px;
+      font-size: 1rem;
+    }
+
+    &__editText {
+      display: none;
+      width: 80%;
+      height: 100%;
+      border: none;
+      padding: 5px 10px;
+      font-size: 1rem;
+    }
+  }
+
+  .p-listItem--done {
+    background: i.$bgColor-sub;
+    color: #888;
+  }
+
+  &__editText--done {
+    display: none;
+    height: 100%;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1rem;
+    background: i.$bgColor-sub;
+
+    input {
+      background: i.$bgColor-sub;
+    }
+  }
+}

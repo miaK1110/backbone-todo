@@ -1,0 +1,10 @@
+@use './object/utility/import' as i;
+
+body {
+  background: i.$bgColor;
+  color: i.$fontColor;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
+}
