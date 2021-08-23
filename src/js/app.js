@@ -1,5 +1,6 @@
-console.log('aaaaaaaaaaaa');
-alert('aaaaaaaaaaa');
+import $ from 'jquery';
+import _ from 'underscore';
+import Backbone from 'backbone';
 
 //===========================================
 // Model

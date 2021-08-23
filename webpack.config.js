@@ -4,7 +4,7 @@ module.exports = {
   entry: path.join(__dirname, 'src/js/app.js'),
   output: {
     path: path.join(__dirname, 'dist/js'),
-    filename: 'all.js',
+    filename: 'app.js',
   },
   module: {
     loaders: [
