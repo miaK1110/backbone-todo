@@ -4,12 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>jquery-todo</title>
+  <title>Backbone.js-todo</title>
   <link rel="stylesheet" href="dist/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"
+    integrity="sha512-ZuOjyqq409+q6uc49UiBF3fTeyRyP8Qs0Jf/7FxH5LfhqBMzrR5cwbpDA4BgzSo884w6q/+oNdIeHenOqhISGw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"
+    integrity="sha512-9EgQDzuYx8wJBppM4hcxK8iXc5a1rFLp/Chug4kIcSWRDEgjMiClF8Y3Ja9/0t8RDDg19IfY5rs6zaPS9eaEBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 
 <body>
@@ -17,7 +24,7 @@
   <!-- Header-area -->
   <header class="l-header">
     <div class="p-header">
-      <h1 class="p-header__title">jQuery TODO</h1>
+      <h1 class="p-header__title">Backbone.js TODO</h1>
       <span class="p-header__emoji">&#128020;</span>
     </div>
   </header>
@@ -40,7 +47,22 @@
 
     <!-- Todo-list -->
     <ul class="p-todoList js-todo_list">
-      <li class="p-listItem js-todo_list-item" data-text="click tasks to swicth edit mode">
+
+      <script type="text/template" id="template-list-item">
+        <li class="p-list__item js-todo_list-item <% if (isDone){ %>list__item--done<% } %>">
+          <i class="<% if (isDone){ %>fas fa-check-circle<% }else{ %>far fa-check-circle<% } %>
+            c-icon p-listItem__iconTick js-toggle-done" aria-hidden="true"></i>
+          <% if (!editMode){ %>
+          <span class="p-listItem__text js-todo_list-text"><%= text %></span>
+          <% }else{ %>
+          <input type="text" class="p-listItem__editText js-todo_list-editForm" value="<%= text %>">
+          <% } %>
+          <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
+        </li>
+      </script>
+
+
+      <!-- <li class="p-listItem js-todo_list-item" data-text="click tasks to swicth edit mode">
         <i class="c-icon p-listItem__iconTick far fa-check-circle js-click-done" aria-hidden="true"></i>
         <span class="p-listItem__text js-todo_list-text">Click todo to edit</span>
         <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click tasks to swicth edit mode">
@@ -57,7 +79,8 @@
         <span class="p-listItem__text js-todo_list-text">Click bin to delete todo</span>
         <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click bin to delete the task">
         <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
-      </li>
+      </li> -->
+
     </ul>
   </main>
 
