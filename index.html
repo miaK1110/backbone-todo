@@ -17,64 +17,55 @@
   <!-- Header-area -->
   <header class="l-header">
     <div class="p-header">
-      <h1 class="p-header__title">Backbone.js TODO</h1>
-      <span class="p-header__emoji">&#128020;</span>
+      <h1 class="p-header__title">Backbone TODO</h1>
+      <span class="p-header__emoji">&#128060;</span>
     </div>
   </header>
 
-  <!-- Add-todo-area -->
-  <main class="l-main">
-    <form class="p-addTodo">
-      <div class="p-addTodo__inputArea">
-        <input type="text" class="p-addTodo__inputText js-get-val" value="" placeholder="...">
-        <span class="c-error js-toggle-error">You need to put something</span>
-      </div>
-      <button class="c-btn p-addTodo__btn js-add-todo">Add Todo</button>
-    </form>
+  <main class="l-main" id="app">
+
+    <!-- add-todo-inputArea -->
+
+    <form class="p-addTodo" id="js-form"></form>
 
     <!-- Search-area -->
-    <div class="p-searchBox">
+    <div class="p-searchBox" id="js-search">
       <i class="fa fa-search p-searchBox__icon" aria-hidden="true"></i>
       <input type="text" class="p-searchBox__inputText js-search" value="" placeholder="Search todos">
     </div>
 
     <!-- Todo-list -->
-    <ul class="p-todoList js-todo_list">
+    <ul class="p-todoList js-todo_list"></ul>
 
-      <script type="text/template" id="template-list-item">
-        <li class="p-list__item js-todo_list-item <% if (isDone){ %>list__item--done<% } %>">
+    <script type="text/template" id="template-list-item">
+      <% if(forSearchResult) {%>
+      <li class="p-listItem js-todo_list-item <% if (isDone){ %>p-listItem--done<% } %>">
           <i class="<% if (isDone){ %>fas fa-check-circle<% }else{ %>far fa-check-circle<% } %>
-            c-icon p-listItem__iconTick js-toggle-done" aria-hidden="true"></i>
+            c-icon p-listItem__iconTick js-click-done" aria-hidden="true"></i>
           <% if (!editMode){ %>
           <span class="p-listItem__text js-todo_list-text"><%= text %></span>
-          <% }else{ %>
-          <input type="text" class="p-listItem__editText js-todo_list-editForm" value="<%= text %>">
+          <% }else if(editMode){ %>
+          <input type="text" class="p-listItem__editText js-todo_list-editForm" value="<%= text %>" />
           <% } %>
           <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
         </li>
+        <% } %>
       </script>
 
 
-      <!-- <li class="p-listItem js-todo_list-item" data-text="click tasks to swicth edit mode">
-        <i class="c-icon p-listItem__iconTick far fa-check-circle js-click-done" aria-hidden="true"></i>
-        <span class="p-listItem__text js-todo_list-text">Click todo to edit</span>
-        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click tasks to swicth edit mode">
-        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
-      </li>
-      <li class="p-listItem js-todo_list-item" data-text="Tick to done the task">
-        <i class="c-icon p-listItem__iconTick far fa-check-circle js-click-done" aria-hidden="true"></i>
-        <span class="p-listItem__text js-todo_list-text">Tick the todo to set to done</span>
-        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="Tick to done the task">
-        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
-      </li>
-      <li class="p-listItem p-listItem--done js-todo_list-item" data-text="click bin to delete the task">
-        <i class="c-icon p-listItem__iconTick fas fa-check-circle  js-click-undo" aria-hidden="true"></i>
-        <span class="p-listItem__text js-todo_list-text">Click bin to delete todo</span>
-        <input type="text" class="p-listItem__editText js-todo_list-editForm" value="click bin to delete the task">
-        <i class="c-icon p-listItem__iconBin fa fa-trash icon-trash js-click-delete" aria-hidden="true"></i>
-      </li> -->
+    <!-- Add-todo-area -->
 
-    </ul>
+    <script type="text/template" id="template-form">
+      <div class="p-addTodo__inputArea">
+        <input type="text" class="p-addTodo__inputText js-get-val" value="" placeholder="...">
+        <% if(hasError){ %>
+        <span class="c-error js-toggle-error"><%= errorMsg %></span>
+        <% } %>
+      </div>
+      <button class="c-btn p-addTodo__btn js-add-todo">ADD TODD</button>
+    </script>
+
+
   </main>
 
   <script src="/dist/js/app.js"></script>

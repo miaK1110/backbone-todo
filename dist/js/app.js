@@ -13614,51 +13614,169 @@ var _backbone2 = _interopRequireDefault(_backbone);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//===========================================
+//=============================================
 // Model
-//==========================================
-
-// task
-var ListItem = _backbone2.default.Model.extend({
+//=============================================
+var Item = _backbone2.default.Model.extend({
   defaults: {
     text: '',
     isDone: false,
-    editMode: false
-  },
-  initialize: function initialize(attrs) {
-    console.log('attrs', attrs);
-  },
-  validation: function validation(attrs) {
-    if (!text || attrs.text.length === 0) {
-      return 'You need to put something';
-    }
+    editMode: false,
+    forSearchResult: true
   }
 });
 
-console.log(ListItem.toJSON());
-
-var listItem1 = new ListItem({ text: 'サンプルTODOタスク', isDone: false });
-var listItem2 = new ListItem({ text: 'サンプルTODOタスク', isDone: true });
-
-//===========================================
-// Collection
-//===========================================
-
-var TODOLIST = _backbone2.default.Collection.extend({
-  model: ListItem
+var Form = _backbone2.default.Model.extend({
+  defaults: {
+    val: '',
+    hasError: false,
+    errorMsg: ''
+  }
 });
 
-var todoList = new TODOLIST([listItem1, listItem2]);
+var form = new Form();
 
-//===========================================
-// View
-//===========================================
+var SearchItem = _backbone2.default.Model.extend({
+  default: {
+    val: ''
+  }
+});
+
+var searchItem = new SearchItem();
+
+//=============================================
+// Model + View
+//=============================================
+
+var ItemView = _backbone2.default.View.extend({
+  template: _underscore2.default.template((0, _jquery2.default)('#template-list-item').html()),
+  events: {
+    'click .js-click-done': 'toggleDone',
+    'click .js-click-delete': 'remove',
+    'click .js-todo_list-text': 'showEdit',
+    'keyup .js-todo_list-editForm': 'closeEdit',
+    'focus .js-todo_list-editForm': 'selectText',
+    'blur .js-todo_list-editForm': 'blurFocus'
+  },
+  initialize: function initialize() {
+    _underscore2.default.bindAll(this, 'toggleDone', 'render', 'remove', 'showEdit', 'selectText', 'blurFocus', 'closeEdit');
+    this.model.bind('change', this.render);
+  },
+  // isDone:true ↔ false:p-listItem ↔ p-listItem--done/icon
+  toggleDone: function toggleDone() {
+    this.model.set({ editMode: false });
+    this.model.set({ isDone: !this.model.get('isDone') });
+  },
+  remove: function remove() {
+    (0, _jquery2.default)(this.el).fadeOut('slow', function () {
+      this.remove();
+    });
+    return this;
+  },
+  // editMode:true ↔ false:p-listItem__text → p-listItem__editText
+  showEdit: function showEdit() {
+    this.model.set({ editMode: true });
+    (0, _jquery2.default)('.js-todo_list-editForm').show().focus();
+    // console.log('editmode: ' + JSON.stringify(this.model({ editMode })));
+  },
+  selectText: function selectText() {
+    (0, _jquery2.default)('.js-todo_list-editForm').select();
+  },
+  blurFocus: function blurFocus() {
+    this.model.set({ editMode: false });
+  },
+  closeEdit: function closeEdit(e) {
+    // 13 = enter key
+    if (e.which === 13) {
+      this.model.set({ text: e.currentTarget.value, editMode: false });
+    }
+  },
+  render: function render() {
+    console.log('render item');
+    var template = this.template(this.model.attributes);
+    this.$el.html(template);
+    return this;
+  }
+});
+
+//=============================================
+// Collection
+//=============================================
+
+var LIST = _backbone2.default.Collection.extend({
+  model: Item
+});
+
+var item1 = new Item({ text: 'sample todo1' });
+var item2 = new Item({ text: 'sample todo2' });
+var list = new LIST([item1, item2]);
+
+var list2 = new LIST([{ text: 'sample todo3' }, { text: 'sample todo4' }]);
+// console.log(list);
+// console.log(list2);
+
+// list.each(function (e, i) {
+//   console.log('[' + i + '] ' + e.get('text'));
+// });
+
+//=============================================
+// Collection + Model + View
+//=============================================
 
 var ListView = _backbone2.default.View.extend({
   initialize: function initialize() {
-    _bindAll(this, 'render');
+    _underscore2.default.bindAll(this, 'render', 'addItem', 'appendItem');
+    this.collection.bind('add', this.appendItem);
+    this.render();
+  },
+  addItem: function addItem(text) {
+    var model = new Item({ text: text });
+    this.collection.add(model);
+  },
+  appendItem: function appendItem(model) {
+    var itemView = new ItemView({ model: model });
+    this.$el.prepend(itemView.render().el);
+    // console.log(itemView);
+    // console.log(itemView.el);
+  },
+  render: function render() {
+    console.log('render list');
+    var that = this;
+    this.collection.each(function (model, i) {
+      that.appendItem(model);
+    });
+    return this;
+  }
+});
+var listView = new ListView({ el: (0, _jquery2.default)('.js-todo_list'), collection: list });
+
+var FormView = _backbone2.default.View.extend({
+  el: (0, _jquery2.default)('#js-form'),
+  template: _underscore2.default.template((0, _jquery2.default)('#template-form').html()),
+  model: form,
+  events: {
+    'click .js-add-todo': 'addTodo'
+  },
+  initialize: function initialize() {
+    _underscore2.default.bindAll(this, 'render', 'addTodo');
     this.model.bind('change', this.render);
     this.render();
+  },
+  addTodo: function addTodo(e) {
+    e.preventDefault();
+
+    if ((0, _jquery2.default)('.js-get-val').val() === '') {
+      this.model.set({ hasError: true, errorMsg: 'you need to put something' });
+      (0, _jquery2.default)('.js-toggle-error').show();
+    } else {
+      (0, _jquery2.default)('.js-toggle-error').hide();
+      this.model.set({
+        val: (0, _jquery2.default)('.js-get-val').val(),
+        hasError: false,
+        errorMsg: ''
+      });
+      listView.addItem(this.model.get('val'));
+    }
   },
   render: function render() {
     var template = this.template(this.model.attributes);
@@ -13666,11 +13784,42 @@ var ListView = _backbone2.default.View.extend({
     return this;
   }
 });
+new FormView();
 
-var listview = new ListView({
-  model: ListItem,
-  el: (0, _jquery2.default)('.js-todo-list'),
-  collection: todoList
+var SearchView = _backbone2.default.View.extend({
+  collection: list,
+  initialize: function initialize() {
+    this.render;
+  },
+  events: {
+    'keyup .js-search': 'search'
+  },
+  search: function search() {
+    // e.preventDefault();
+    this.model.set({ val: (0, _jquery2.default)('.js-search').val() });
+    var searchVal = this.model.escape('val');
+
+    this.collection.each(function (model, i) {
+      model.set({ forSearchResult: true });
+      var text = model.escape('text');
+      // console.log('search word:' + searchVal);
+      // console.log('model text:' + text);
+
+      if (text.match(searchVal)) {
+        // console.log('data exist');
+        return this;
+      }
+      model.set({ forSearchResult: false });
+    });
+  },
+  render: function render() {
+    this.render();
+  }
+});
+
+var serchView = new SearchView({
+  el: (0, _jquery2.default)('#js-search'),
+  model: searchItem
 });
 
 /***/ }),
